@@ -178,7 +178,38 @@ const deleteBtn = (id) => {
 
 
 
+//Modal
 
+const loadPalantDetiles = async (id) => {
+  const url = (`https://openapi.programming-hero.com/api/plant/${id}`);
+    console.log(url);
+  const res = await fetch(url);
+  const datiles = await res.json();
+  showPalantDetiles(datiles.plants);
+};
+const showPalantDetiles = (data) => {
+  console.log(data);
+  detilesContainer.innerHTML = `
+    <div>
+    <h1 class ="font-bold">"${data.name}"</h1>
+    <img class =" w-full h-[300px]  rounded-xl text-[#1f2937]  mt-2 " src="${data.image}"/>
+    <h1 class ="font-bold mt-2">   Price : <span class="font-bold text-2xl">৳</span> ${data.price}</h1>
+    <p> <span class="font-bold ">description :</span> ${data.description}</p>
+    </div>
+    `;
+
+  document.getElementById("plant_modal").showModal();
+};
+
+
+
+
+
+const showLoading = () => {
+  cardContainer.innerHTML = `
+    <h1 class=""><span class="loading loading-spinner text-error"></span></h1>
+    `;
+};
 
 loadCategory();
 defaultLoadCard()
