@@ -25,7 +25,7 @@ const showCategory = (category) => {
     div.innerHTML = `<div id="category-btn-${cate.id}" onclick="loadCard(${cate.id})" 
     class=" md:text-left text-center mt-3 hover:bg-[#15803d] p-2  
     rounded-lg w-full category-tree ">${cate.category_name
-}</div>`;
+      }</div>`;
     categoryContainer.appendChild(div);
   });
 };
@@ -44,8 +44,8 @@ const loadCard = (carded) => {
   fetch(`https://openapi.programming-hero.com/api/category/${carded}`)
     .then((res) => res.json())
     .then((data) => {
-      removeActive ()
-          const categoryBtn = document.getElementById(`category-btn-${carded}`);
+      removeActive()
+      const categoryBtn = document.getElementById(`category-btn-${carded}`);
 
       categoryBtn.classList.add("active");
 
@@ -131,7 +131,7 @@ cardContainer.addEventListener("click", (e) => {
   if (e.target.classList.contains("addToCartBtn")) {
     addCard(e);
     const treeName = e.target.parentNode.querySelector("h1").innerText;
-    alert(`${ treeName } has been added to cart`);
+    alert(`${treeName} has been added to cart`);
   }
 });
 
@@ -152,27 +152,47 @@ const addCard = (e) => {
   });
   showAddCard(bookmarks);
 };
-let money = 0;
+
+
+
+
+// total price
 const showAddCard = (bookmarks) => {
   bookmarkContainer.innerHTML = "";
-  bookmarks.forEach((bookmark) => {
-    total = money + bookmark.price;
+
+  let total = 0;
+
+  bookmarks.forEach((bookmark, index) => {
+    let bookmarkPrice = parseInt(bookmark.price);
+    total += bookmarkPrice;
+
     bookmarkContainer.innerHTML += `
-        <div class=" my-2 p-1 bg-[#F0FDF4] rounded-lg ">
-        <div class="flex justify-between px-2"><h1 >${bookmark.title}</h1> <h1>${bookmark.price}</h1></div> <br>
-        <button onclick="deleteBtn()" class="btn rounded-xl bg-[#F0FDF4] hover:bg-[#15803d] mt-5">Delete</button>
-        </div>
-        `;
+      <div class="my-2 p-1 bg-[#F0FDF4] rounded-lg">
+        <div class="flex justify-between px-2">
+          <h1>${bookmark.title}</h1> 
+          <h1>${bookmark.price}</h1>
+        </div> <br>
+        <button onclick="deleteBtn(${index})" 
+                class="btn rounded-xl bg-[#F0FDF4] hover:bg-[#15803d] mt-5">
+          Delete
+        </button>
+      </div>
+    `;
   });
+
+  totalBtn.innerText = total;
 };
 
-const deleteBtn = (id) => {
-  fetch(`https://openapi.programming-hero.com/api/plants`)
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data.plants);
-    });
+// Delete a bookmark
+const deleteBtn = (index) => {
+  bookmarks.splice(index, 1);   // remove at that index
+  showAddCard(bookmarks);       // re-render
 };
+
+
+
+
+
 
 
 
@@ -182,7 +202,7 @@ const deleteBtn = (id) => {
 
 const loadPalantDetiles = async (id) => {
   const url = (`https://openapi.programming-hero.com/api/plant/${id}`);
-    console.log(url);
+  console.log(url);
   const res = await fetch(url);
   const datiles = await res.json();
   showPalantDetiles(datiles.plants);
